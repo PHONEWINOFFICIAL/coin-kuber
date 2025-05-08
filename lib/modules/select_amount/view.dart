@@ -40,6 +40,17 @@ class SelectAmountPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
+              Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  image: DecorationImage(
+                    image: AssetImage('assets/banner.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
               Text(
                 'Choose Amount From Given 8 Options',
                 textAlign: TextAlign.start,
@@ -48,6 +59,94 @@ class SelectAmountPage extends StatelessWidget {
                   fontSize: Get.width * 0.045,
                   fontWeight: FontWeight.w900,
                   fontFamily: 'Rubik',
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 230,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(
+                            AppRoutes.getAmount,
+                            arguments: {'amount': '₹1000', 'image': 'assets/rs_500.png'},
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Stack(
+                            children: [
+                              Image(
+                                image: AssetImage('assets/paytm_card.png'),
+                                fit: BoxFit.fill,
+                              ),
+                              Positioned(
+                                bottom: 27,
+                                left: 0,
+                                right: 0,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Get ₹1000',
+                                    style: TextStyle(
+                                      fontFamily: 'Rubik',
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(
+                            AppRoutes.getAmount,
+                            arguments: {'amount': '₹2000', 'image': 'assets/rs_500.png'},
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Stack(
+                            children: [
+                              Image(
+                                image: AssetImage('assets/paypal_card.png'),
+                                fit: BoxFit.fill,
+                              ),
+                              Positioned(
+                                bottom: 17,
+                                left: 0,
+                                right: 0,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Get ₹2000',
+                                    style: TextStyle(
+                                      fontFamily: 'Rubik',
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 20),

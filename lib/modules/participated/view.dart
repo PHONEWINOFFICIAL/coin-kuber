@@ -16,13 +16,17 @@ class ParticipatedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 40,
-            right: Get.width * 0.05,
-            left: Get.width * 0.05,
-          ),
+      body: Container(
+        height: Get.height,
+        padding: EdgeInsets.only(
+          top: 40,
+          right: Get.width * 0.05,
+          left: Get.width * 0.05,
+        ),
+        decoration: BoxDecoration(
+          image: DecorationImage(image: AssetImage('assets/bg_two.png'), fit: BoxFit.cover),
+        ),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
