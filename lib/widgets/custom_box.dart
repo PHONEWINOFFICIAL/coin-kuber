@@ -4,13 +4,15 @@ import 'package:get/get.dart';
 import 'custom_button.dart';
 
 class CustomBox extends StatelessWidget {
-  const CustomBox({super.key, required this.index, required this.onTap, this.isGradient, this.label, this.image});
+  const CustomBox({super.key, required this.index, required this.onTap, this.isGradient, this.label, this.image, this.desc, required this.isTask});
 
   final int index;
   final VoidCallback onTap;
   final bool? isGradient;
   final String? label;
   final String? image;
+  final String? desc;
+  final bool isTask;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class CustomBox extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            'Click on button and Wait 30 Second',
+            desc ?? 'Click on button and Wait 30 Second',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Color(0xFF8D8D8D),
@@ -63,15 +65,15 @@ class CustomBox extends StatelessWidget {
           const SizedBox(height: 10),
           CustomButton(
             onTap: onTap,
-            label: 'Shared',
+            label: isTask ? isGradient! ? 'Done' :'Click' : isGradient! ? 'Shared' :'Share',
             height: 40,
-            showIcon: true,
+            showIcon: isGradient ?? false,
             isClickable: true,
             textColor: Colors.white,
             icon: 'assets/smile.png',
             textSize: Get.width * 0.04,
             radius: 7,
-            isGradient: true,
+            isGradient: isGradient,
             spacing: 0,
             iconSize: 40,
           ),

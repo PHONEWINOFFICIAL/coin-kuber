@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../routes/routes.dart';
 import '../../widgets/custom_box.dart';
@@ -7,11 +9,86 @@ import '../../widgets/custom_button.dart';
 import 'logic.dart';
 import 'state.dart';
 
-class TasksPage extends StatelessWidget {
-  TasksPage({Key? key}) : super(key: key);
+class TasksPage extends StatefulWidget {
+  TasksPage({super.key});
 
+  @override
+  State<TasksPage> createState() => _TasksPageState();
+}
+
+class _TasksPageState extends State<TasksPage> {
   final TasksLogic logic = Get.put(TasksLogic());
+
   final TasksState state = Get.find<TasksLogic>().state;
+
+  Set<int> completedIndexes = {};
+
+  bool isEveryTrue = false;
+  List<bool> taskStatuses = List.generate(6, (_) => false);
+
+  @override
+  void initState() {
+    super.initState();
+    loadShareStatus();
+  }
+
+  Future<void> loadShareStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final stored = prefs.getStringList('task_statuses');
+    if (stored != null && stored.length == 6) {
+      setState(() {
+        taskStatuses = stored.map((e) => e == 'true').toList();
+      });
+    }
+
+    isEveryTrue = prefs.getBool('task_statuses_every_true') ?? true;
+  }
+
+  Future<void> saveShareStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(
+      'task_statuses',
+      taskStatuses.map((e) => e.toString()).toList(),
+    );
+
+    isEveryTrue = taskStatuses.every((e) => e == true);
+
+    await prefs.setBool(
+      'task_statuses_every_true',
+      isEveryTrue,
+    );
+    setState(() {});
+  }
+
+  Future<void> openWebsiteAndTrack(int index) async {
+    final Uri url = Uri.parse('https://flutter.dev/');
+    if (await canLaunchUrl(url)) {
+      final DateTime startTime = DateTime.now();
+      await launchUrl(url);
+
+      await Future.delayed(Duration(seconds: 5));
+
+      final DateTime endTime = DateTime.now();
+      final difference = endTime.difference(startTime).inSeconds;
+
+      if (difference >= 5) {
+        setState(() {
+          taskStatuses[index] = true;
+        });
+        await saveShareStatus();
+      } else {
+        Get.snackbar(
+          "Task Incomplete",
+          "You must stay for at least 30 seconds!",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +153,22 @@ class TasksPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return CustomBox(
                       index: index,
+                      isTask: true,
                       label: 'Task ${index + 1}',
                       onTap: () {
-                        Get.toNamed(AppRoutes.taskExplanation);
+                        if (index > 0 && !taskStatuses[index - 1]) {
+                          Get.snackbar(
+                            'Error',
+                            "Please complete Task $index first",
+                            backgroundColor: Colors.red,
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                          return;
+                        }
+
+                        openWebsiteAndTrack(index);
                       },
-                      isGradient: true,
+                      isGradient: taskStatuses[index],
                       image: 'assets/task.png',
                     );
                   },
@@ -93,9 +181,9 @@ class TasksPage extends StatelessWidget {
                 },
                 label: 'Continue',
                 showIcon: false,
-                isClickable: true,
+                isClickable: isEveryTrue,
                 textColor: Colors.black,
-                bgColor: Color(0xFFD0D0D0),
+                bgColor: isEveryTrue ? Color(0xFF9AD942) : Color(0xFFD0D0D0),
               ),
               const SizedBox(height: 20),
             ],
@@ -104,5 +192,4 @@ class TasksPage extends StatelessWidget {
       ),
     );
   }
-
 }

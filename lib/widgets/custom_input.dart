@@ -125,6 +125,7 @@ class CustomTextForm extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
+              counterStyle: TextStyle(fontSize: 0),
               errorStyle: TextStyle(fontSize: 0),
               errorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.redAccent),

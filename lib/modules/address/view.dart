@@ -7,13 +7,86 @@ import 'package:get/get.dart';
 import 'logic.dart';
 import 'state.dart';
 
-class AddressPage extends StatelessWidget {
-  AddressPage({Key? key}) : super(key: key);
+String? selectedPayment;
 
+class AddressPage extends StatefulWidget {
+  const AddressPage({super.key});
+
+  @override
+  State<AddressPage> createState() => _AddressPageState();
+}
+
+class _AddressPageState extends State<AddressPage> {
   final AddressLogic logic = Get.put(AddressLogic());
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final AddressState state = Get.find<AddressLogic>().state;
 
-  final TextEditingController controller = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
+  final TextEditingController paymentNumberController = TextEditingController();
+  final TextEditingController upiIdController = TextEditingController();
+  final TextEditingController paypalIdController = TextEditingController();
+  final TextEditingController cryptoIdController = TextEditingController();
+
+  void onChangedEmail(String value) {
+    setState(() {});
+  }
+
+  void onChangedPaymentNumber(String value) {
+    setState(() {});
+  }
+
+  void onChangedUpiId(String value) {
+    setState(() {});
+  }
+
+  void onChangedPaypalId(String value) {
+    setState(() {});
+  }
+
+  void onChangedCryptoId(String value) {
+    setState(() {});
+  }
+
+  void onChangedMobileNumber(String value) {
+    setState(() {});
+  }
+
+  String? validateEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return '';
+    }
+    return null;
+  }
+
+  String? validateMobileNumber(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return '';
+    }
+
+    if (value.length != 10) {
+      return '';
+    }
+    return null;
+  }
+
+  String? validatePaymentMethod(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      final upiPattern = RegExp(r'^[\w.-]+@[\w.-]+$');
+      if (!upiPattern.hasMatch(value!)) {
+        return 'Please enter a valid UPI ID.';
+      }
+    }
+
+    return null;
+  }
+
+  bool _isButtonClickable() {
+    final bool isFormValid = _formKey.currentState?.validate() ?? false;
+
+    return isFormValid;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,154 +140,200 @@ class AddressPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              CustomTextForm(
-                label: 'Email',
-                readOnly: false,
-                textAlign: TextAlign.start,
-                controller: controller,
-                hintText: 'Enter email',
-                width: Get.width,
-                height: 50,
-                keyboardType: TextInputType.emailAddress,
-                onChanged: (value) {},
-              ),
-              const SizedBox(height: 20),
-              CustomTextForm(
-                label: 'Mobile Number',
-                readOnly: false,
-                textAlign: TextAlign.start,
-                controller: controller,
-                hintText: 'Enter your mobile number',
-                width: Get.width,
-                height: 50,
-                keyboardType: TextInputType.emailAddress,
-                onChanged: (value) {},
-              ),
-              const SizedBox(height: 20),
-              Align(
-                alignment: AlignmentDirectional.topStart,
-                child: Text(
-                  'Select Payment Gateway',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: Get.width * 0.05,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Rubik',
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              PaymentDropdown(),
-              const SizedBox(height: 10),
-              CustomTextForm(
-                label: 'UPI ID',
-                showLabel: false,
-                readOnly: false,
-                textAlign: TextAlign.start,
-                controller: controller,
-                hintText: 'Enter 10 digit number',
-                width: Get.width,
-                height: 50,
-                keyboardType: TextInputType.emailAddress,
-                onChanged: (value) {},
-              ),
-              const SizedBox(height: 20),
-              CustomTextForm(
-                label: 'UPI ID',
-                readOnly: false,
-                textAlign: TextAlign.start,
-                controller: controller,
-                hintText: 'Enter UPI ID',
-                width: Get.width,
-                height: 50,
-                keyboardType: TextInputType.emailAddress,
-                onChanged: (value) {},
-              ),
-              const SizedBox(height: 20),
-              CustomTextForm(
-                label: 'Paypal ID',
-                readOnly: false,
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.only(left: 12.0, right: 8.0),
-                  child: SizedBox(
-                    width: 35,
-                    height: 35,
-                    child: Image.asset(
-                      'assets/paypal.png',
-                      fit: BoxFit.contain,
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    CustomTextForm(
+                      label: 'Email',
+                      readOnly: false,
+                      textAlign: TextAlign.start,
+                      controller: emailController,
+                      hintText: 'Enter email',
+                      width: Get.width,
+                      height: 50,
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: onChangedEmail,
+                      validator: (v) => validateEmail(emailController.text),
                     ),
-                  ),
-                ),
-                textAlign: TextAlign.start,
-                controller: controller,
-                hintText: 'Enter Paypal ID',
-                width: Get.width,
-                height: 50,
-                keyboardType: TextInputType.emailAddress,
-                onChanged: (value) {},
-              ),
-              const SizedBox(height: 20),
-              CustomTextForm(
-                label: 'Crypto ID',
-                readOnly: false,
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.only(left: 12.0, right: 5),
-                  child: Container(
-                    margin: EdgeInsets.only(top: 10),
-                    width: 80,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Positioned(
-                          left: 0,
-                          child: SizedBox(
-                            width: 35,
-                            height: 35,
-                            child: Image.asset(
-                              'assets/binance.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 15,
-                          child: SizedBox(
-                            width: 35,
-                            height: 35,
-                            child: Image.asset(
-                              'assets/eth.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 15,
-                          child: SizedBox(
-                            width: 35,
-                            height: 35,
-                            child: Image.asset(
-                              'assets/btc.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                      ],
+                    const SizedBox(height: 20),
+                    CustomTextForm(
+                      label: 'Mobile Number',
+                      readOnly: false,
+                      textAlign: TextAlign.start,
+                      controller: numberController,
+                      hintText: 'Enter your mobile number',
+                      width: Get.width,
+                      height: 50,
+                      maxLength: 10,
+                      keyboardType: TextInputType.number,
+                      onChanged: onChangedMobileNumber,
+                      validator:
+                          (v) => validateMobileNumber(numberController.text),
                     ),
-                  ),
+                    const SizedBox(height: 20),
+                    Align(
+                      alignment: AlignmentDirectional.topStart,
+                      child: Text(
+                        'Select Payment Gateway',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: Get.width * 0.05,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Rubik',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    PaymentDropdown(),
+                    const SizedBox(height: 10),
+                    CustomTextForm(
+                      label: 'UPI ID',
+                      showLabel: false,
+                      readOnly: false,
+                      textAlign: TextAlign.start,
+                      controller: paymentNumberController,
+                      hintText: 'Enter 10 digit number',
+                      width: Get.width,
+                      height: 50,
+                      keyboardType: TextInputType.number,
+                      maxLength: 10,
+                      onChanged: onChangedMobileNumber,
+                      validator:
+                          (v) => validateMobileNumber(
+                            paymentNumberController.text,
+                          ),
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextForm(
+                      label: 'UPI ID',
+                      readOnly: false,
+                      textAlign: TextAlign.start,
+                      controller: upiIdController,
+                      hintText: 'Enter UPI ID',
+                      width: Get.width,
+                      height: 50,
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: onChangedUpiId,
+                      validator: (v) => validatePaymentMethod(v),
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextForm(
+                      label: 'Paypal ID',
+                      readOnly: false,
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(left: 12.0, right: 8.0),
+                        child: SizedBox(
+                          width: 35,
+                          height: 35,
+                          child: Image.asset(
+                            'assets/paypal.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                      textAlign: TextAlign.start,
+                      controller: paypalIdController,
+                      hintText: 'Enter Paypal ID',
+                      width: Get.width,
+                      height: 50,
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: onChangedPaypalId,
+                      validator: (v) => null,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextForm(
+                      label: 'Crypto ID',
+                      readOnly: false,
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(left: 12.0, right: 5),
+                        child: Container(
+                          margin: EdgeInsets.only(top: 10),
+                          width: 80,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Positioned(
+                                left: 0,
+                                child: SizedBox(
+                                  width: 35,
+                                  height: 35,
+                                  child: Image.asset(
+                                    'assets/binance.png',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: 19,
+                                child: SizedBox(
+                                  width: 35,
+                                  height: 35,
+                                  child: Image.asset(
+                                    'assets/eth.png',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: 38,
+                                child: SizedBox(
+                                  width: 35,
+                                  height: 35,
+                                  child: Image.asset(
+                                    'assets/btc.png',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      textAlign: TextAlign.start,
+                      controller: cryptoIdController,
+                      hintText: 'Enter Crypto ID',
+                      width: Get.width,
+                      height: 50,
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: onChangedCryptoId,
+                      validator: (v) => null,
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.start,
-                controller: controller,
-                hintText: 'Enter Crypto ID',
-                width: Get.width,
-                height: 50,
-                keyboardType: TextInputType.emailAddress,
-                onChanged: (value) {},
               ),
               const SizedBox(height: 20),
-              CustomButton(label: 'Submit', showIcon: false, isClickable: true, onTap: () {
-                Get.toNamed(AppRoutes.participated);
-              },),
+              CustomButton(
+                label: 'Submit',
+                showIcon: false,
+                isClickable: true,
+                bgColor: Color(0xFF9AD942),
+                onTap: () {
+                  print('in function');
+                  if (!_isButtonClickable()) {
+                    Get.snackbar(
+                      'Error',
+                      'Please fill all required fields correctly.',
+                      backgroundColor: Colors.red,
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                    return;
+                  }
+
+                  if (selectedPayment == null || selectedPayment!.isEmpty) {
+                    Get.snackbar(
+                      'Error',
+                      'Payment option is empty',
+                      backgroundColor: Colors.red,
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                    return;
+                  }
+
+                  Get.toNamed(AppRoutes.participated);
+                },
+              ),
               const SizedBox(height: 20),
             ],
           ),
@@ -232,21 +351,10 @@ class PaymentDropdown extends StatefulWidget {
 }
 
 class _PaymentDropdownState extends State<PaymentDropdown> {
-  String? selectedPayment;
-
   final List<Map<String, String>> paymentOptions = [
-    {
-      'label': 'Paytm',
-      'icon': 'assets/paytm.png',
-    },
-    {
-      'label': 'PhonePe',
-      'icon': 'assets/phonepe.png',
-    },
-    {
-      'label': 'Google Pay',
-      'icon': 'assets/gpay.png',
-    },
+    {'label': 'Paytm', 'icon': 'assets/paytm.png'},
+    {'label': 'PhonePe', 'icon': 'assets/phonepe.png'},
+    {'label': 'Google Pay', 'icon': 'assets/gpay.png'},
   ];
 
   @override
@@ -275,40 +383,41 @@ class _PaymentDropdownState extends State<PaymentDropdown> {
             'Select Your Phonepe/Paytm/Gpay Number ',
             style: TextStyle(color: Colors.grey),
           ),
-          items: paymentOptions.map((option) {
-            final label = option['label']!;
-            final iconPath = option['icon']!;
-            return DropdownMenuItem<String>(
-              value: label,
-              child: Row(
-                children: [
-                  Image.asset(
-                    iconPath,
-                    width: 24,
-                    height: 24,
-                    fit: BoxFit.contain,
+          items:
+              paymentOptions.map((option) {
+                final label = option['label']!;
+                final iconPath = option['icon']!;
+                return DropdownMenuItem<String>(
+                  value: label,
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        iconPath,
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          label,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Radio<String>(
+                        value: label,
+                        groupValue: selectedPayment,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedPayment = value!;
+                          });
+                        },
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      label,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  Radio<String>(
-                    value: label,
-                    groupValue: selectedPayment,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedPayment = value!;
-                      });
-                    },
-                    visualDensity: VisualDensity.compact,
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
+                );
+              }).toList(),
           selectedItemBuilder: (BuildContext context) {
             return paymentOptions.map((option) {
               return Row(
@@ -320,10 +429,7 @@ class _PaymentDropdownState extends State<PaymentDropdown> {
                     fit: BoxFit.contain,
                   ),
                   const SizedBox(width: 10),
-                  Text(
-                    option['label']!,
-                    style: const TextStyle(fontSize: 16),
-                  ),
+                  Text(option['label']!, style: const TextStyle(fontSize: 16)),
                 ],
               );
             }).toList();

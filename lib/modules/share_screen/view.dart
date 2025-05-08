@@ -23,9 +23,7 @@ class ShareScreenPage extends StatefulWidget {
 class _ShareScreenPageState extends State<ShareScreenPage> {
   final ShareScreenLogic logic = Get.put(ShareScreenLogic());
 
-  final ShareScreenState state = Get
-      .find<ShareScreenLogic>()
-      .state;
+  final ShareScreenState state = Get.find<ShareScreenLogic>().state;
 
   final ShareService shareService = ShareService();
 
@@ -48,18 +46,30 @@ class _ShareScreenPageState extends State<ShareScreenPage> {
         shareStatuses = stored.map((e) => e == 'true').toList();
       });
     }
+
+    isEveryTrue = prefs.getBool('share_statuses_every_true') ?? true;
   }
 
   Future<void> saveShareStatus() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('share_statuses', shareStatuses.map((e) => e.toString()).toList());
+    await prefs.setStringList(
+      'share_statuses',
+      shareStatuses.map((e) => e.toString()).toList(),
+    );
+
+    isEveryTrue = shareStatuses.every((e) => e == true);
+
+    await prefs.setBool(
+      'share_statuses_every_true',
+      isEveryTrue,
+    );
+
+    setState(() {});
   }
 
   void setWhatsAppStatus(int index, bool status) async {
     setState(() {
-      for (int i = 0; i < shareStatuses.length; i++) {
-        shareStatuses[i] = (i == index) ? status : false;
-      }
+      shareStatuses[index] = status;
     });
     await saveShareStatus();
   }
@@ -67,36 +77,22 @@ class _ShareScreenPageState extends State<ShareScreenPage> {
   Future<void> shareToWhatsApp({
     required bool isBusiness,
     required int index,
-    required dynamic item,
+    required String item,
   }) async {
-    final shareText = item.shareTxt ?? '';
-
     bool status = await shareService.shareTextToWhatsApp(
       context: context,
-      text: shareText,
+      text: item,
       imageUrl: '',
       isBusiness: isBusiness,
       onShareComplete: (String message) {},
     );
 
     if (!status) {
-      InteractiveToast.slide(
-        title: Text(
-          'Failed to share content. Try Again!',
-          style: TextStyle(color: AppColors.whiteColor),
-        ),
-        toastStyle: ToastStyle(
-          titleLeadingGap: 10,
-          backgroundColor: Colors.red,
-          progressBarColor: AppColors.whiteColor,
-        ),
-        toastSetting: const SlidingToastSetting(
-          animationDuration: Duration(seconds: 1),
-          displayDuration: Duration(milliseconds: 100),
-          toastStartPosition: ToastPosition.bottom,
-          toastAlignment: Alignment.bottomCenter,
-          maxWidth: double.infinity,
-        ),
+      Get.snackbar(
+        'Error',
+        "Failed to share content. Try Again!",
+        backgroundColor: Colors.red,
+        snackPosition: SnackPosition.BOTTOM,
       );
     }
 
@@ -144,20 +140,31 @@ class _ShareScreenPageState extends State<ShareScreenPage> {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: Get.height * 0.78,
+                height: Get.height * 0.87,
                 child: GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 15,
-                      mainAxisSpacing: 15,
-                      childAspectRatio: 0.82
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 15,
+                    childAspectRatio: 0.75,
                   ),
                   itemCount: 6,
                   itemBuilder: (context, index) {
                     return CustomBox(
                       index: index,
+                      isTask: false,
                       onTap: () {
+                        if (index > 0 && !shareStatuses[index - 1]) {
+                          Get.snackbar(
+                            'Error',
+                            "Please complete Task $index first",
+                            backgroundColor: Colors.red,
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                          return;
+                        }
+
                         showModalBottomSheet(
                           context: context,
                           shape: RoundedRectangleBorder(
@@ -184,8 +191,7 @@ class _ShareScreenPageState extends State<ShareScreenPage> {
                                       "WhatsApp",
                                       style: TextStyle(
                                         color: AppColors.whiteColor,
-                                        fontFamily:
-                                        AppAssets.radioCanada,
+                                        fontFamily: AppAssets.radioCanada,
                                       ),
                                     ),
                                     onTap: () async {
@@ -197,9 +203,7 @@ class _ShareScreenPageState extends State<ShareScreenPage> {
                                       );
                                     },
                                   ),
-                                  Divider(
-                                    color: AppColors.greyColor,
-                                  ),
+                                  Divider(color: AppColors.greyColor),
                                   ListTile(
                                     leading: Image.asset(
                                       'assets/whatsapp.png',
@@ -209,8 +213,7 @@ class _ShareScreenPageState extends State<ShareScreenPage> {
                                       "WhatsApp Business",
                                       style: TextStyle(
                                         color: AppColors.whiteColor,
-                                        fontFamily:
-                                        AppAssets.radioCanada,
+                                        fontFamily: AppAssets.radioCanada,
                                       ),
                                     ),
                                     onTap: () async {
@@ -228,7 +231,8 @@ class _ShareScreenPageState extends State<ShareScreenPage> {
                           },
                         );
                       },
-                      isGradient: true,
+                      isGradient: shareStatuses[index],
+                      desc: 'Click on button and share with your friend',
                     );
                   },
                 ),
@@ -240,9 +244,9 @@ class _ShareScreenPageState extends State<ShareScreenPage> {
                 },
                 label: 'Continue',
                 showIcon: false,
-                isClickable: true,
+                isClickable: isEveryTrue,
                 textColor: Colors.black,
-                bgColor: Color(0xFFD0D0D0),
+                bgColor: isEveryTrue ? Color(0xFF9AD942) : Color(0xFFD0D0D0),
               ),
               const SizedBox(height: 20),
             ],

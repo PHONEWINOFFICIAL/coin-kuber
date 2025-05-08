@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ShareService {
-  static const androidPlatform = MethodChannel('com.example.coin_kuber/share');
-  static const iosPlatform = MethodChannel('com.phonewin.app/share');
+  static const androidPlatform = MethodChannel('com.example.coin_kuber_new/share');
+  static const iosPlatform = MethodChannel('com.example.coin_kuber_new/share');
 
   Future<bool> shareTextToWhatsApp({
     required BuildContext? context,
