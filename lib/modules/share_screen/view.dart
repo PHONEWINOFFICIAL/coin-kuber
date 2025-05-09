@@ -106,13 +106,16 @@ class _ShareScreenPageState extends State<ShareScreenPage> {
       body: Container(
         width: Get.width,
         padding: EdgeInsets.only(
-          top: 40,
           right: Get.width * 0.05,
           left: Get.width * 0.05,
+        ),
+        decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage('assets/bg_one.png'), fit: BoxFit.cover)
         ),
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const SizedBox(height: 40,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -138,7 +141,6 @@ class _ShareScreenPageState extends State<ShareScreenPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
               SizedBox(
                 height: Get.height * 0.87,
                 child: GridView.builder(

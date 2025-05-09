@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class WinnerItem extends StatelessWidget {
-  const WinnerItem({super.key});
+  const WinnerItem({super.key, required this.winners});
+
+  final Map<String, dynamic> winners;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class WinnerItem extends StatelessWidget {
                   color: Color(0xFFD3D3D3).withOpacity(0.2),
                   image: DecorationImage(
                     image: AssetImage(
-                      'assets/profile_avatar.png',
+                      winners['image'],
                     ),
                   ),
                 ),
@@ -48,7 +50,7 @@ class WinnerItem extends StatelessWidget {
           Align(
             alignment: AlignmentDirectional.topStart,
             child: Text(
-              'Jatin',
+              winners['name'],
               textAlign: TextAlign.start,
               style: TextStyle(
                 color: Colors.black,
@@ -76,7 +78,7 @@ class WinnerItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '₹5,000',
+                winners['amount'],
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   color: Colors.black26,

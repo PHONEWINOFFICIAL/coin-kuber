@@ -39,7 +39,7 @@ class SharedPref {
   }
 
   static int getInt({required String key}) {
-    return _sharedPref!.getInt(key) ?? 0;
+    return _sharedPref?.getInt(key) ?? 0;
   }
 
   static Future<bool> setInt({required String key, required int value}) async {

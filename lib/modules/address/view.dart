@@ -2,7 +2,9 @@ import 'package:coin_kuber_new/routes/routes.dart';
 import 'package:coin_kuber_new/widgets/custom_button.dart';
 import 'package:coin_kuber_new/widgets/custom_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'logic.dart';
 import 'state.dart';
@@ -91,248 +93,280 @@ class _AddressPageState extends State<AddressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          width: Get.width,
-          padding: EdgeInsets.only(
-            top: 40,
-            right: Get.width * 0.05,
-            left: Get.width * 0.05,
-          ),
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        width: Get.width,
+        decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage('assets/bg_one.png'), fit: BoxFit.cover)
+        ),
+        child: SingleChildScrollView(
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () => Get.back(),
-                    child: Image(
-                      image: AssetImage('assets/arrow_back.png'),
-                      width: 25,
-                      height: 25,
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      'COIN KUBER',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 26,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Rubik',
+              const SizedBox(height: 40,),
+              Padding(
+                padding: EdgeInsets.only(
+                  right: Get.width * 0.05,
+                  left: Get.width * 0.05,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () => Get.back(),
+                      child: Image(
+                        image: AssetImage('assets/arrow_back.png'),
+                        width: 25,
+                        height: 25,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Center(
-                child: Text(
-                  'Enter your payment withdraw details',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: Get.width * 0.045,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Rubik',
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    CustomTextForm(
-                      label: 'Email',
-                      readOnly: false,
-                      textAlign: TextAlign.start,
-                      controller: emailController,
-                      hintText: 'Enter email',
-                      width: Get.width,
-                      height: 50,
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: onChangedEmail,
-                      validator: (v) => validateEmail(emailController.text),
-                    ),
-                    const SizedBox(height: 20),
-                    CustomTextForm(
-                      label: 'Mobile Number',
-                      readOnly: false,
-                      textAlign: TextAlign.start,
-                      controller: numberController,
-                      hintText: 'Enter your mobile number',
-                      width: Get.width,
-                      height: 50,
-                      maxLength: 10,
-                      keyboardType: TextInputType.number,
-                      onChanged: onChangedMobileNumber,
-                      validator:
-                          (v) => validateMobileNumber(numberController.text),
-                    ),
-                    const SizedBox(height: 20),
-                    Align(
-                      alignment: AlignmentDirectional.topStart,
+                    Expanded(
                       child: Text(
-                        'Select Payment Gateway',
-                        textAlign: TextAlign.start,
+                        'COIN KUBER',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: Get.width * 0.05,
+                          fontSize: 26,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Rubik',
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    PaymentDropdown(),
-                    const SizedBox(height: 10),
-                    CustomTextForm(
-                      label: 'UPI ID',
-                      showLabel: false,
-                      readOnly: false,
-                      textAlign: TextAlign.start,
-                      controller: paymentNumberController,
-                      hintText: 'Enter 10 digit number',
-                      width: Get.width,
-                      height: 50,
-                      keyboardType: TextInputType.number,
-                      maxLength: 10,
-                      onChanged: onChangedMobileNumber,
-                      validator:
-                          (v) => validateMobileNumber(
-                            paymentNumberController.text,
-                          ),
-                    ),
-                    const SizedBox(height: 20),
-                    CustomTextForm(
-                      label: 'UPI ID',
-                      readOnly: false,
-                      textAlign: TextAlign.start,
-                      controller: upiIdController,
-                      hintText: 'Enter UPI ID',
-                      width: Get.width,
-                      height: 50,
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: onChangedUpiId,
-                      validator: (v) => validatePaymentMethod(v),
-                    ),
-                    const SizedBox(height: 20),
-                    CustomTextForm(
-                      label: 'Paypal ID',
-                      readOnly: false,
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(left: 12.0, right: 8.0),
-                        child: SizedBox(
-                          width: 35,
-                          height: 35,
-                          child: Image.asset(
-                            'assets/paypal.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                      textAlign: TextAlign.start,
-                      controller: paypalIdController,
-                      hintText: 'Enter Paypal ID',
-                      width: Get.width,
-                      height: 50,
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: onChangedPaypalId,
-                      validator: (v) => null,
-                    ),
-                    const SizedBox(height: 20),
-                    CustomTextForm(
-                      label: 'Crypto ID',
-                      readOnly: false,
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(left: 12.0, right: 5),
-                        child: Container(
-                          margin: EdgeInsets.only(top: 10),
-                          width: 80,
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              Positioned(
-                                left: 0,
-                                child: SizedBox(
-                                  width: 35,
-                                  height: 35,
-                                  child: Image.asset(
-                                    'assets/binance.png',
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 19,
-                                child: SizedBox(
-                                  width: 35,
-                                  height: 35,
-                                  child: Image.asset(
-                                    'assets/eth.png',
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 38,
-                                child: SizedBox(
-                                  width: 35,
-                                  height: 35,
-                                  child: Image.asset(
-                                    'assets/btc.png',
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      textAlign: TextAlign.start,
-                      controller: cryptoIdController,
-                      hintText: 'Enter Crypto ID',
-                      width: Get.width,
-                      height: 50,
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: onChangedCryptoId,
-                      validator: (v) => null,
-                    ),
                   ],
                 ),
               ),
               const SizedBox(height: 20),
-              CustomButton(
-                label: 'Submit',
-                showIcon: false,
-                isClickable: true,
-                bgColor: Color(0xFF9AD942),
-                onTap: () {
-                  print('in function');
-                  if (!_isButtonClickable()) {
-                    Get.snackbar(
-                      'Error',
-                      'Please fill all required fields correctly.',
-                      backgroundColor: Colors.red,
-                      snackPosition: SnackPosition.BOTTOM,
-                    );
-                    return;
-                  }
+              Padding(
+                padding: EdgeInsets.only(
+                  right: Get.width * 0.05,
+                  left: Get.width * 0.05,
+                ),
+                child: Center(
+                  child: Text(
+                    'Enter your payment withdraw details',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Get.width * 0.045,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Rubik',
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.only(
+                  right: Get.width * 0.05,
+                  left: Get.width * 0.05,
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      CustomTextForm(
+                        label: 'Email',
+                        readOnly: false,
+                        textAlign: TextAlign.start,
+                        controller: emailController,
+                        hintText: 'Enter email',
+                        width: Get.width,
+                        height: 50,
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: onChangedEmail,
+                        validator: (v) => validateEmail(emailController.text),
+                      ),
+                      const SizedBox(height: 20),
+                      CustomTextForm(
+                        label: 'Mobile Number',
+                        readOnly: false,
+                        textAlign: TextAlign.start,
+                        controller: numberController,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        hintText: 'Enter your mobile number',
+                        width: Get.width,
+                        height: 50,
+                        maxLength: 10,
+                        keyboardType: TextInputType.number,
+                        onChanged: onChangedMobileNumber,
+                        validator:
+                            (v) => validateMobileNumber(numberController.text),
+                      ),
+                      const SizedBox(height: 20),
+                      Align(
+                        alignment: AlignmentDirectional.topStart,
+                        child: Text(
+                          'Select Payment Gateway',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Get.width * 0.05,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Rubik',
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      PaymentDropdown(),
+                      const SizedBox(height: 10),
+                      CustomTextForm(
+                        label: 'UPI ID',
+                        showLabel: false,
+                        readOnly: false,
+                        textAlign: TextAlign.start,
+                        controller: paymentNumberController,
+                        hintText: 'Enter 10 digit number',
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        width: Get.width,
+                        height: 50,
+                        keyboardType: TextInputType.number,
+                        maxLength: 10,
+                        onChanged: onChangedMobileNumber,
+                        validator:
+                            (v) => validateMobileNumber(
+                              paymentNumberController.text,
+                            ),
+                      ),
+                      const SizedBox(height: 20),
+                      CustomTextForm(
+                        label: 'UPI ID',
+                        readOnly: false,
+                        textAlign: TextAlign.start,
+                        controller: upiIdController,
+                        hintText: 'Enter UPI ID',
+                        width: Get.width,
+                        height: 50,
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: onChangedUpiId,
+                        validator: (v) => validatePaymentMethod(v),
+                      ),
+                      const SizedBox(height: 20),
+                      CustomTextForm(
+                        label: 'Paypal ID',
+                        readOnly: false,
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.only(left: 12.0, right: 8.0),
+                          child: SizedBox(
+                            width: 35,
+                            height: 35,
+                            child: Image.asset(
+                              'assets/paypal.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        textAlign: TextAlign.start,
+                        controller: paypalIdController,
+                        hintText: 'Enter Paypal ID',
+                        width: Get.width,
+                        height: 50,
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: onChangedPaypalId,
+                        validator: (v) => null,
+                      ),
+                      const SizedBox(height: 20),
+                      CustomTextForm(
+                        label: 'Crypto ID',
+                        readOnly: false,
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.only(left: 12.0, right: 5),
+                          child: Container(
+                            margin: EdgeInsets.only(top: 10),
+                            width: 80,
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Positioned(
+                                  left: 0,
+                                  child: SizedBox(
+                                    width: 35,
+                                    height: 35,
+                                    child: Image.asset(
+                                      'assets/binance.png',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  left: 19,
+                                  child: SizedBox(
+                                    width: 35,
+                                    height: 35,
+                                    child: Image.asset(
+                                      'assets/eth.png',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  left: 38,
+                                  child: SizedBox(
+                                    width: 35,
+                                    height: 35,
+                                    child: Image.asset(
+                                      'assets/btc.png',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        textAlign: TextAlign.start,
+                        controller: cryptoIdController,
+                        hintText: 'Enter Crypto ID',
+                        width: Get.width,
+                        height: 50,
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: onChangedCryptoId,
+                        validator: (v) => null,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.only(
+                  right: Get.width * 0.05,
+                  left: Get.width * 0.05,
+                ),
+                child: CustomButton(
+                  label: 'Submit',
+                  showIcon: false,
+                  isClickable: true,
+                  bgColor: Color(0xFF9AD942),
+                  onTap: () async {
+                    if (!_isButtonClickable()) {
+                      Get.snackbar(
+                        'Error',
+                        'Please fill all required fields correctly.',
+                        backgroundColor: Colors.red,
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                      return;
+                    }
 
-                  if (selectedPayment == null || selectedPayment!.isEmpty) {
-                    Get.snackbar(
-                      'Error',
-                      'Payment option is empty',
-                      backgroundColor: Colors.red,
-                      snackPosition: SnackPosition.BOTTOM,
-                    );
-                    return;
-                  }
+                    if (selectedPayment == null || selectedPayment!.isEmpty) {
+                      Get.snackbar(
+                        'Error',
+                        'Payment option is empty',
+                        backgroundColor: Colors.red,
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                      return;
+                    }
 
-                  Get.toNamed(AppRoutes.participated);
-                },
+                    final prefs = await SharedPreferences.getInstance();
+
+                    prefs.setString('is_participated', 'yes');
+                    Get.toNamed(AppRoutes.participated);
+                  },
+                ),
               ),
               const SizedBox(height: 20),
             ],
