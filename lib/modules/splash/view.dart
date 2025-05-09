@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:coin_kuber_new/services/shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';

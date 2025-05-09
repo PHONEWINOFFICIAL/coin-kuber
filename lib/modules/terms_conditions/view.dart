@@ -5,7 +5,7 @@ import 'logic.dart';
 import 'state.dart';
 
 class TermsConditionsPage extends StatelessWidget {
-  TermsConditionsPage({Key? key}) : super(key: key);
+  TermsConditionsPage({super.key});
 
   final TermsConditionsLogic logic = Get.put(TermsConditionsLogic());
   final TermsConditionsState state = Get.find<TermsConditionsLogic>().state;

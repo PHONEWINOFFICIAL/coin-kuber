@@ -10,7 +10,7 @@ import 'logic.dart';
 import 'state.dart';
 
 class TasksPage extends StatefulWidget {
-  TasksPage({super.key});
+  const TasksPage({super.key});
 
   @override
   State<TasksPage> createState() => _TasksPageState();

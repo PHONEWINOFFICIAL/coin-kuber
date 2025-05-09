@@ -1,7 +1,6 @@
 import 'package:coin_kuber_new/services/share_service.dart';
 import 'package:coin_kuber_new/widgets/custom_box.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sliding_toast/flutter_sliding_toast.dart';
 
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
