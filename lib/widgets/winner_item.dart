@@ -11,8 +11,7 @@ class WinnerItem extends StatelessWidget {
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey, width: 1.0),
-        color: Color(0xFFD3D3D3).withOpacity(0.2),
+        border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1.0),
         image: DecorationImage(
           image: AssetImage('assets/winners_bg.png'),
         ),
@@ -54,7 +53,7 @@ class WinnerItem extends StatelessWidget {
               textAlign: TextAlign.start,
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Rubik',
               ),
@@ -77,14 +76,25 @@ class WinnerItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                winners['amount'],
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  color: Colors.black26,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Rubik',
+              ShaderMask(
+                shaderCallback: (bounds) => LinearGradient(
+                  colors: [
+                    Color(0xFF006400).withOpacity(0.6),
+                    Color(0xFF013220),
+                  ],
+                  stops: [0.1, 1.0],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds),
+                child: Text(
+                  winners['amount'],
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Rubik',
+                  ),
                 ),
               ),
               Image(

@@ -143,7 +143,7 @@ class _TasksPageState extends State<TasksPage> {
                 ),
               ),
               SizedBox(
-                height: Get.height * 0.78,
+                height: Get.height * 0.8,
                 child: GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

@@ -24,7 +24,7 @@ class _AddressPageState extends State<AddressPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final AddressState state = Get.find<AddressLogic>().state;
 
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
   final TextEditingController paymentNumberController = TextEditingController();
   final TextEditingController upiIdController = TextEditingController();
@@ -138,12 +138,11 @@ class _AddressPageState extends State<AddressPage> {
               Padding(
                 padding: EdgeInsets.only(
                   right: Get.width * 0.05,
-                  left: Get.width * 0.05,
+                  left: Get.width * 0.02,
                 ),
                 child: Center(
                   child: Text(
                     'Enter your payment withdraw details',
-                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: Get.width * 0.045,
@@ -164,16 +163,16 @@ class _AddressPageState extends State<AddressPage> {
                   child: Column(
                     children: [
                       CustomTextForm(
-                        label: 'Email',
+                        label: 'Name',
                         readOnly: false,
                         textAlign: TextAlign.start,
-                        controller: emailController,
-                        hintText: 'Enter email',
+                        controller: nameController,
+                        hintText: 'Enter your name',
                         width: Get.width,
                         height: 50,
                         keyboardType: TextInputType.emailAddress,
                         onChanged: onChangedEmail,
-                        validator: (v) => validateEmail(emailController.text),
+                        validator: (v) => validateEmail(nameController.text),
                       ),
                       const SizedBox(height: 20),
                       CustomTextForm(
@@ -211,7 +210,7 @@ class _AddressPageState extends State<AddressPage> {
                       PaymentDropdown(),
                       const SizedBox(height: 10),
                       CustomTextForm(
-                        label: 'UPI ID',
+                        label: 'Payment number',
                         showLabel: false,
                         readOnly: false,
                         textAlign: TextAlign.start,
@@ -229,6 +228,7 @@ class _AddressPageState extends State<AddressPage> {
                             (v) => validateMobileNumber(
                               paymentNumberController.text,
                             ),
+                        bgColor: Color(0xFFD3D3D3).withOpacity(0.3),
                       ),
                       const SizedBox(height: 20),
                       CustomTextForm(
@@ -336,7 +336,7 @@ class _AddressPageState extends State<AddressPage> {
                   left: Get.width * 0.05,
                 ),
                 child: CustomButton(
-                  label: 'Submit',
+                  label: 'Continue',
                   showIcon: false,
                   isClickable: true,
                   bgColor: Color(0xFF9AD942),

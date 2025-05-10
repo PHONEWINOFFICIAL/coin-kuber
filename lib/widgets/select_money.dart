@@ -7,13 +7,15 @@ class SelectMoney extends StatelessWidget {
     required this.isSelectable,
     required this.image,
     required this.amount,
-    required this.onTap,
+    required this.onTap, this.bgColor, this.borderColor,
   });
 
   final bool isSelectable;
   final String image;
   final String amount;
   final VoidCallback onTap;
+  final Color? bgColor;
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,8 @@ class SelectMoney extends StatelessWidget {
       width: Get.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey, width: 1.0),
-        color: Color(0xFFD3D3D3).withOpacity(0.2),
+        border: Border.all(color: borderColor ?? Colors.green, width: 1.0),
+        color: bgColor ?? Color(0xFFA8EF54).withOpacity(0.1),
       ),
       child: Column(
         children: [
@@ -36,7 +38,7 @@ class SelectMoney extends StatelessWidget {
               style: TextStyle(
                 color: Colors.black,
                 fontSize: Get.width * 0.042,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w600,
                 fontFamily: 'Rubik',
               ),
             ),
@@ -62,7 +64,7 @@ class SelectMoney extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: Get.width * 0.042,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w600,
                       fontFamily: 'Rubik',
                     ),
                   ),

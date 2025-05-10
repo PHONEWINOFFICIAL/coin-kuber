@@ -77,6 +77,8 @@ class _GetAmountPageState extends State<GetAmountPage> {
                 amount: amount,
                 image: image,
                 onTap: () {},
+                bgColor: Colors.white,
+                borderColor: Colors.grey.withOpacity(0.5),
               ),
               const SizedBox(height: 20),
               NoteItem(

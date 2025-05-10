@@ -1,6 +1,7 @@
 import 'package:coin_kuber_new/widgets/winner_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../routes/routes.dart';
 import 'logic.dart';
@@ -75,22 +76,22 @@ class WinnersPage extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    InkWell(
-                      onTap: () => Get.back(),
-                      child: Image.asset(
-                        'assets/arrow_back.png',
-                        width: 25,
-                        height: 25,
-                      ),
-                    ),
+                    // InkWell(
+                    //   onTap: () => Get.back(),
+                    //   child: Image.asset(
+                    //     'assets/arrow_back.png',
+                    //     width: 25,
+                    //     height: 25,
+                    //   ),
+                    // ),
                     Expanded(
                       child: Text(
-                        'WINNER ANNOUNCED',
+                        'WINNERS ANNOUNCED',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Rubik',
                           fontWeight: FontWeight.w600,
-                          fontSize: 26,
+                          fontSize: 24,
                           color: Colors.black,
                         ),
                       ),
@@ -135,8 +136,7 @@ class WinnersPage extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey, width: 1.0),
-                  color: Color(0xFFD3D3D3).withOpacity(0.2),
+                  border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1.0),
                 ),
                 child: GridView.builder(
                   shrinkWrap: true,
@@ -147,7 +147,7 @@ class WinnersPage extends StatelessWidget {
                     crossAxisCount: 2,
                     crossAxisSpacing: 15,
                     mainAxisSpacing: 15,
-                    childAspectRatio: 0.85,
+                    childAspectRatio: 0.84,
                   ),
                   itemBuilder: (context, index) {
                     final winners = winnersList[index];
@@ -189,8 +189,13 @@ class WinnersPage extends StatelessWidget {
                   left: Get.width * 0.05,
                 ),
                 child: InkWell(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.congratulation);
+                  onTap: () async {
+                    final prefs = await SharedPreferences.getInstance();
+
+                    prefs.remove('is_participated');
+                    prefs.remove('end_time');
+
+                    Get.toNamed(AppRoutes.selectAmount);
                   },
                   child: Container(
                     width: Get.width,

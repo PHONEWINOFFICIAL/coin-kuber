@@ -22,6 +22,7 @@ class CustomTextForm extends StatelessWidget {
   final FocusNode? focusNode;
   final String label;
   final bool? showLabel;
+  final Color? bgColor;
 
   const CustomTextForm({
     super.key,
@@ -43,7 +44,7 @@ class CustomTextForm extends StatelessWidget {
     this.onFieldSubmitted,
     this.focusNode,
     required this.label,
-    this.showLabel,
+    this.showLabel, this.bgColor,
   });
 
   @override
@@ -87,6 +88,8 @@ class CustomTextForm extends StatelessWidget {
             inputFormatters: inputFormatters,
             enableInteractiveSelection: enableInteractiveSelection,
             decoration: InputDecoration(
+              filled: bgColor != null,
+              fillColor: bgColor,
               suffixIcon: suffixIcon,
               prefixIcon: prefixIcon,
               hintText: hintText,
@@ -102,8 +105,8 @@ class CustomTextForm extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: Colors.black.withOpacity(0.4),
-                  width: 1,
+                  color: bgColor ?? Colors.black.withOpacity(0.4),
+                  width: bgColor != null ? 0 : 1,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -113,15 +116,15 @@ class CustomTextForm extends StatelessWidget {
               ),
               border: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: Colors.black.withOpacity(0.4),
-                  width: 1,
+                  color: bgColor ??  Colors.black.withOpacity(0.4),
+                  width: bgColor != null ? 0 : 1,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: Colors.black.withOpacity(0.2),
-                  width: 1,
+                  color: bgColor ?? Colors.black.withOpacity(0.2),
+                  width: bgColor != null ? 0 : 1,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),

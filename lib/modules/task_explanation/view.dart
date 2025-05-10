@@ -76,6 +76,8 @@ class _TaskExplanationPageState extends State<TaskExplanationPage> {
                 amount: '0',
                 image: image,
                 onTap: () {},
+                bgColor: Colors.white,
+                borderColor: Colors.grey.withOpacity(0.5),
               ),
               const SizedBox(height: 10),
               Align(
@@ -86,7 +88,7 @@ class _TaskExplanationPageState extends State<TaskExplanationPage> {
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: Get.width * 0.055,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     fontFamily: 'Rubik',
                     letterSpacing: 0.0,
                   ),

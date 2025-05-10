@@ -87,7 +87,7 @@ class ParticipatedPage extends StatelessWidget {
                         'Congratulations!',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: Get.width * 0.09,
+                          fontSize: Get.width * 0.08,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
@@ -101,7 +101,7 @@ class ParticipatedPage extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'Rubik',
                             fontWeight: FontWeight.w500,
-                            fontSize: 16,
+                            fontSize: Get.width * 0.033,
                             color: Colors.grey,
                           ),
                           children: [
@@ -122,7 +122,7 @@ class ParticipatedPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 80),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
+                      padding: EdgeInsets.symmetric(horizontal: Get.width * 0.1),
                       child: Row(
                         children: [
                           Flexible(
@@ -188,7 +188,7 @@ class ParticipatedPage extends StatelessWidget {
                       ),
                       child: InkWell(
                         onTap: () {
-                          Get.toNamed(AppRoutes.winners);
+                          Get.toNamed(AppRoutes.selectAmount);
                         },
                         child: Container(
                           width: Get.width,
@@ -363,7 +363,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
           style: const TextStyle(
             color: Colors.white,
             fontFamily: 'Rubik',
-            fontSize: 12,
+            fontSize: 11,
           ),
         ),
       ],

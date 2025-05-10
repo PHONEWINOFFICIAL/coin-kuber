@@ -153,9 +153,9 @@ class SelectAmountPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 const Divider(color: Color(0xFFCACACA), height: 2),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 SelectMoney(
                   isSelectable: true,
                   amount: '₹50',
